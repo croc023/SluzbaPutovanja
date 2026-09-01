@@ -1,0 +1,67 @@
+﻿@model IEnumerable<PrezentacioniSloj.ViewModels.ZahtevZaPutovanjeViewModel>
+
+@{
+    ViewBag.Title = "Zahtevi za službena putovanja";
+}
+
+<h2>Zahtevi za službena putovanja</h2>
+
+<p>
+    @Html.ActionLink("Kreiraj novi zahtev", "Kreiraj", null, new { @class = "btn btn-primary" })
+</p>
+
+@using (Html.BeginForm("Indeks", "ZahtevZaPutovanje", FormMethod.Get, new { @class = "row g-3 mb-4" }))
+{
+    <div class="col-md-4">
+        <input type="text" name="pretraga" value="@ViewBag.PretragaFilter" class="form-control" placeholder="Pretraži zaposlenog, destinaciju, oznaku..." />
+    </div>
+    <div class="col-md-3">
+        <select name="status" class="form-select">
+            <option value="">-- Svi statusi --</option>
+            <option value="Na čekanju" @(ViewBag.StatusFilter == "Na čekanju" ? "selected" : "")>Na čekanju</option>
+            <option value="Odobren" @(ViewBag.StatusFilter == "Odobren" ? "selected" : "")>Odobren</option>
+            <option value="Odbijen" @(ViewBag.StatusFilter == "Odbijen" ? "selected" : "")>Odbijen</option>
+        </select>
+    </div>
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-secondary">Filtriraj</button>
+        <a href="@Url.Action("Indeks", "ZahtevZaPutovanje")" class="btn btn-outline-secondary ms-1">Poništi</a>
+        <a href="@Url.Action("StampaSpiska", "ZahtevZaPutovanje", new { status = ViewBag.StatusFilter, pretraga = ViewBag.PretragaFilter })" target="_blank" class="btn btn-dark ms-1">Štampaj spisak</a>
+    </div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>R. br.</th>
+            <th>Oznaka</th>
+            <th>Zaposleni</th>
+            <th>Destinacija</th>
+            <th>Datum podnošenja</th>
+            <th>Status</th>
+            <th>Ukupni troškovi</th>
+            <th>Akcije</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int rb = 1; }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@(rb++)</td>
+                <td>@item.OznakaZahteva</td>
+                <td>@item.ImePrezimeZaposlenog</td>
+                <td>@item.Destinacija</td>
+                <td>@item.DatumPodnosenja.ToString("dd.MM.yyyy.")</td>
+                <td>@item.Status</td>
+                <td>@item.UkupanProcenjeniTrosak.ToString("N2") RSD</td>
+                <td>
+                    @Html.ActionLink("Detalji", "Detalji", new { id = item.BrojZahteva }, new { @class = "btn btn-info btn-sm" })
+                    @Html.ActionLink("Izmeni", "Izmeni", new { id = item.BrojZahteva }, new { @class = "btn btn-warning btn-sm" })
+                    <a href="@Url.Action("StampaObrazac", new { id = item.BrojZahteva })" target="_blank" class="btn btn-secondary btn-sm">Štampaj</a>
+                    @Html.ActionLink("Obriši", "Obrisi", new { id = item.BrojZahteva }, new { @class = "btn btn-danger btn-sm", onclick = "return confirm('Da li ste sigurni da želite da obrišete ovaj zahtev?');" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

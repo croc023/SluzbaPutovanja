@@ -1,0 +1,40 @@
+﻿@{
+    ViewBag.Title = "Početna";
+}
+
+<main>
+    <section class="row mb-4" aria-labelledby="aspnetTitle">
+        <h1 id="title">Sistem za službena putovanja</h1>
+        <p class="lead">Centralizovani portal za podnošenje, odobravanje, praćenje i štampu zahteva za službena putovanja zaposlenih.</p>
+        <p>
+            <a href="@Url.Action("Indeks", "ZahtevZaPutovanje")" class="btn btn-primary btn-md">Pregled zahteva &raquo;</a>
+            <a href="@Url.Action("Kreiraj", "ZahtevZaPutovanje")" class="btn btn-success btn-md ms-2">Kreiraj novi zahtev +</a>
+        </p>
+    </section>
+
+    <div class="row">
+        <section class="col-md-4" aria-labelledby="zahteviTitle">
+            <h2 id="zahteviTitle">Evidencija zahteva</h2>
+            <p>
+                Pregledajte sve podnete zahteve, vršite pretragu po destinaciji i filtrirajte po statusima (Na čekanju, Odobren, Odbijen).
+            </p>
+            <p><a class="btn btn-outline-dark" href="@Url.Action("Indeks", "ZahtevZaPutovanje")">Otvori evidenciju &raquo;</a></p>
+        </section>
+
+        <section class="col-md-4" aria-labelledby="noviZahtevTitle">
+            <h2 id="noviZahtevTitle">Novi zahtev</h2>
+            <p>
+                Podnesite novi zahtev uz navođenje destinacije, procenjenih troškova i poslovnog razloga uz primenu automatskih pravila odobrenja.
+            </p>
+            <p><a class="btn btn-outline-dark" href="@Url.Action("Kreiraj", "ZahtevZaPutovanje")">Podnesi zahtev &raquo;</a></p>
+        </section>
+
+        <section class="col-md-4" aria-labelledby="stampaTitle">
+            <h2 id="stampaTitle">Izveštaji i štampa</h2>
+            <p>
+                Generišite zbirne izveštaje spiska zahteva za štampu ili izvezite pojedinačni Master-Detail dokument spreman za potpisivanje.
+            </p>
+            <p><a class="btn btn-outline-dark" href="@Url.Action("StampaSpiska", "ZahtevZaPutovanje")">Štampa spiska &raquo;</a></p>
+        </section>
+    </div>
+</main>

@@ -1,0 +1,142 @@
+﻿@model PrezentacioniSloj.ViewModels.ZahtevZaPutovanjeViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Zahtev za putovanje - @Model.OznakaZahteva</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background-color: #fff;
+            color: #000;
+        }
+
+        .doc-header {
+            border-bottom: 2px solid #000;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .master-box {
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+        }
+
+        .signatures {
+            margin-top: 60px;
+        }
+
+        .signature-line {
+            border-top: 1px dashed #000;
+            width: 200px;
+            text-align: center;
+            padding-top: 5px;
+        }
+
+        @@media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                padding: 0;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mb-4 no-print">
+        <button onclick="window.print()" class="btn btn-primary">Odštampaj dokument</button>
+        <button onclick="window.close()" class="btn btn-secondary">Zatvori</button>
+    </div>
+
+    <div class="doc-header d-flex justify-content-between align-items-center">
+        <div>
+            <h3 class="mb-0 fw-bold">ZAHTEV ZA SLUŽBENO PUTOVANJE</h3>
+            <small class="text-muted">Evidencioni nalog br: @Model.BrojZahteva</small>
+        </div>
+        <div class="text-end">
+            <h5 class="fw-bold mb-0">Oznaka: @Model.OznakaZahteva</h5>
+            <small>Datum podnošenja: @Model.DatumPodnosenja.ToString("dd.MM.yyyy.")</small>
+        </div>
+    </div>
+
+    <div class="master-box">
+        <h5 class="fw-bold mb-3 border-bottom pb-2">Osnovni podaci o zahtevu</h5>
+        <div class="row mb-2">
+            <div class="col-6"><strong>Zaposleni / Podnosilac:</strong> @Model.ImePrezimeZaposlenog</div>
+            <div class="col-6"><strong>Destinacija:</strong> @Model.Destinacija</div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-6"><strong>Status zahteva:</strong> @Model.Status</div>
+            <div class="col-6"><strong>Potvrda direktora:</strong> @(Model.PotvrdaDirektora ? "DA" : "NE")</div>
+        </div>
+        <div class="row mb-2">
+            <div class="col-12"><strong>Poslovni razlog:</strong> @(string.IsNullOrEmpty(Model.PoslovniRazlog) ? "/" : Model.PoslovniRazlog)</div>
+        </div>
+        <div class="row">
+            <div class="col-12"><strong>Cilj agende:</strong> @(string.IsNullOrEmpty(Model.CiljAgende) ? "/" : Model.CiljAgende)</div>
+        </div>
+    </div>
+
+    <div class="detail-box">
+        <h5 class="fw-bold mb-3">Specifikacija troškova (Master-Detail)</h5>
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 10%;">R. br.</th>
+                    <th>Vrsta troška</th>
+                    <th style="width: 25%;" class="text-end">Iznos</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Stavke != null && Model.Stavke.Any())
+                {
+                    int stRb = 1;
+                    foreach (var stavka in Model.Stavke)
+                    {
+                        <tr>
+                            <td>@(stRb++)</td>
+                            <td>@stavka.VrstaTroska</td>
+                            <td class="text-end">@stavka.Iznos.ToString("N2") RSD</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">Nema pojedinačnih stavki troškova. Prikazan je opšti procenjeni iznos.</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="fw-bold border-top">
+                    <td colspan="2" class="text-end">UKUPAN PROCENJENI TROŠAK:</td>
+                    <td class="text-end">@Model.UkupanProcenjeniTrosak.ToString("N2") RSD</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class="signatures d-flex justify-content-between">
+        <div class="signature-line">
+            <p class="mb-0">Podnosilac zahteva</p>
+            <small class="text-muted">(@Model.ImePrezimeZaposlenog)</small>
+        </div>
+        <div class="signature-line">
+            <p class="mb-0">Odobrio / Direktor</p>
+            <small class="text-muted">(Potpis i pečat)</small>
+        </div>
+    </div>
+</body>
+</html>

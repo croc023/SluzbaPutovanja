@@ -1,0 +1,41 @@
+﻿@model PrezentacioniSloj.ViewModels.ZahtevZaPutovanjeViewModel
+
+@{
+    ViewBag.Title = "Detalji zahteva";
+}
+
+<h2>Detalji zahteva za službeno putovanje</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Broj zahteva:</dt>
+        <dd>@Model.BrojZahteva</dd>
+
+        <dt>Zaposleni:</dt>
+        <dd>@Model.ImePrezimeZaposlenog</dd>
+
+        <dt>Datum podnošenja:</dt>
+        <dd>@Model.DatumPodnosenja.ToString("dd.MM.yyyy.")</dd>
+
+        <dt>Destinacija:</dt>
+        <dd>@Model.Destinacija</dd>
+
+        <dt>Cilj agende:</dt>
+        <dd>@Model.CiljAgende</dd>
+
+        <dt>Poslovni razlog:</dt>
+        <dd>@Model.PoslovniRazlog</dd>
+
+        <dt>Status:</dt>
+        <dd>@Model.Status</dd>
+
+        <dt>Ukupni procenjeni trošak:</dt>
+        <dd>@Model.UkupanProcenjeniTrosak.ToString("N2") RSD</dd>
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Izmeni", "Izmeni", new { id = Model.BrojZahteva }, new { @class = "btn btn-warning" }) |
+    @Html.ActionLink("Nazad na listu", "Indeks", null, new { @class = "btn btn-default" })
+</p>

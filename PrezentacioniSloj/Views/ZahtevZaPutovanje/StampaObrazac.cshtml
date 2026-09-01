@@ -1,0 +1,172 @@
+﻿@model PrezentacioniSloj.ViewModels.ZahtevZaPutovanjeViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Obrazac zahteva - @Model.OznakaZahteva</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background-color: #fff;
+            color: #000;
+            font-size: 14px;
+        }
+
+        .table-custom {
+            border: 1px solid #bce8f1;
+        }
+
+            .table-custom th, .table-custom td {
+                border: 1px solid #bce8f1 !important;
+                vertical-align: middle;
+            }
+
+        .header-bg {
+            background-color: #d9edf7;
+            font-weight: bold;
+        }
+
+        .section-title {
+            background-color: #d9edf7;
+            font-weight: bold;
+            padding: 6px 10px;
+            border: 1px solid #bce8f1;
+            margin-top: 15px;
+            margin-bottom: 0;
+            font-size: 13px;
+        }
+
+        .box-container {
+            border: 1px solid #bce8f1;
+            padding: 10px 15px;
+            margin-bottom: 0;
+        }
+
+        @@media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                padding: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mb-3 no-print">
+        <button onclick="window.print()" class="btn btn-primary">Odštampaj obrazac</button>
+        <button onclick="window.close()" class="btn btn-secondary">Zatvori</button>
+    </div>
+
+    <div class="container p-0">
+        <div class="border border-primary">
+            <div class="text-center header-bg py-2 border-bottom border-primary">
+                <span class="text-muted small">Sistem za upravljanje zahtevima za službena putovanja zaposlenih</span><br />
+                <h5 class="fw-bold mb-0">OBRAZAC ZAHTEVA ZA SLUŽBENO PUTOVANJE (TRF)</h5>
+            </div>
+            <div class="row g-0 border-bottom border-primary">
+                <div class="col-6 p-2 border-end border-primary">
+                    <strong>Broj zahteva:</strong><br />
+                    <span>@Model.OznakaZahteva</span>
+                </div>
+                <div class="col-6 p-2">
+                    <strong>Datum podnošenja:</strong><br />
+                    <span>@Model.DatumPodnosenja.ToString("dd.MM.yyyy.")</span>
+                </div>
+            </div>
+
+            <div class="section-title border-top border-bottom border-primary">1. OSNOVNI PODACI O ZAPOSLENOM I PUTOVANJU (MASTER)</div>
+            <div class="box-container">
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Ime i prezime zaposlenog:</strong> @Model.ImePrezimeZaposlenog</div>
+                    <div class="col-6"><strong>Destinacija putovanja:</strong> @Model.Destinacija</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-6"><strong>Sektor / Odeljenje:</strong> /</div>
+                    <div class="col-6"><strong>Status:</strong> @Model.Status</div>
+                </div>
+            </div>
+
+            <div class="section-title border-top border-bottom border-primary">2. OPIS SLUŽBENOG PUTOVANJA</div>
+            <div class="box-container">
+                <div class="mb-2"><strong>Detaljan opis putovanja (cilj, agenda):</strong><br />@(string.IsNullOrEmpty(Model.CiljAgende) ? "/" : Model.CiljAgende)</div>
+                <div class="mb-1"><strong>Poslovni razlog za putovanje:</strong><br />@(string.IsNullOrEmpty(Model.PoslovniRazlog) ? "/" : Model.PoslovniRazlog)</div>
+            </div>
+
+            <div class="section-title border-top border-bottom border-primary">3. PROCENA TROŠKOVA PUTOVANJA (DETAIL – STAVKE PUTOVANJA)</div>
+            <table class="table table-bordered mb-0 table-custom">
+                <thead>
+                    <tr class="header-bg">
+                        <th style="width: 8%;">R. br.</th>
+                        <th>Vrsta troška (npr. Avionska karta, Hotel, Dnevnice, Prevoz)</th>
+                        <th style="width: 25%; text-align: right;">Iznos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Stavke != null && Model.Stavke.Any())
+                    {
+                        int stRb = 1;
+                        foreach (var stavka in Model.Stavke)
+                        {
+                            <tr>
+                                <td>@(stRb++)</td>
+                                <td>@stavka.VrstaTroska</td>
+                                <td class="text-end">@stavka.Iznos.ToString("N2") RSD</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>1.</td>
+                            <td>Opšti procenjeni trošak / putni troškovi</td>
+                            <td class="text-end">@Model.UkupanProcenjeniTrosak.ToString("N2") RSD</td>
+                        </tr>
+                        <tr><td>2.</td><td>&nbsp;</td><td class="text-end">&nbsp;</td></tr>
+                        <tr><td>3.</td><td>&nbsp;</td><td class="text-end">&nbsp;</td></tr>
+                        <tr><td>4.</td><td>&nbsp;</td><td class="text-end">&nbsp;</td></tr>
+                    }
+                    <tr class="fw-bold header-bg">
+                        <td colspan="2">UKUPNO PROCENJENI TROŠAK – automatski izračunato:</td>
+                        <td class="text-end">@Model.UkupanProcenjeniTrosak.ToString("N2") RSD</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="section-title border-top border-bottom border-primary">4. UTICAJ NA BUDŽET I ODOBRENJA</div>
+            <div class="box-container">
+                <div class="row mb-3">
+                    <div class="col-6 border-end border-primary"><strong>Uticaj na budžet sektora:</strong> /</div>
+                    <div class="col-6"><strong>Novi/revidirani budžet:</strong> /</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-12"><strong>Potvrda direktora sektora:</strong> @(Model.PotvrdaDirektora ? "DA" : "NE (popunjava se ako ukupan trošak > X)")</div>
+                </div>
+                <div class="row mt-4 pt-3">
+                    <div class="col-6">
+                        <div style="border-top: 1px dashed #000; width: 220px; padding-top: 5px;">
+                            Potpis zaposlenog:<br />
+                            <small class="text-muted">(@Model.ImePrezimeZaposlenog)</small>
+                        </div>
+                    </div>
+                    <div class="col-6 text-end">
+                        <div style="border-top: 1px dashed #000; width: 220px; padding-top: 5px; display: inline-block; text-align: left;">
+                            Potpis direktora sektora:<br />
+                            <small class="text-muted">(Potpis i pečat)</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
