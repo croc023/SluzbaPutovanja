@@ -1,30 +1,22 @@
-﻿using Newtonsoft.Json.Linq;
-using SlojPodataka.Modeli;
-using SlojPodataka.Repositories;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json.Linq;
+using SlojPodataka.Modeli;
+using SlojPodataka.Repositories;
+using SistemPutovanja.Repozitorijumi;
 
 namespace PoslovnaLogika
 {
     public class ObradaZahteva
     {
-        private readonly ZahtevZaPutovanjeRepo _zahtevRepo = new ZahtevZaPutovanjeRepo();
-        private readonly ZaposleniRepo _zaposleniRepo = new ZaposleniRepo();
+        private readonly ZahtevZaPutovanjeRepozitorijum _zahtevRepo;
+        private readonly ZaposleniRepo _zaposleniRepo;
 
-        public List<ZahtevZaPutovanje> PreuzmiSveZahteve()
+        public ObradaZahteva()
         {
-            return _zahtevRepo.PreuzmiSve();
-        }
-
-        public ZahtevZaPutovanje VratiZahtevPoId(int id)
-        {
-            return _zahtevRepo.VratiPoId(id);
-        }
-
-        public List<Zaposleni> VratiSveZaposlene()
-        {
-            return _zaposleniRepo.PreuzmiSve();
+            _zahtevRepo = new ZahtevZaPutovanjeRepozitorijum();
+            _zaposleniRepo = new ZaposleniRepo();
         }
 
         public decimal UcitajLimitIzJsona(string putanjaDoJson)
@@ -46,85 +38,84 @@ namespace PoslovnaLogika
             catch (Exception)
             {
             }
+
             return 500m;
         }
 
-        public void KreirajNoviZahtev(ZahtevZaPutovanje zahtev, string putanjaDoJson = null)
+        public bool ProveriOgranicenjeTroska(decimal ukupniTrosak, string putanjaDoJson)
         {
-            zahtev.DatumPodnosenja = DateTime.Now;
-            zahtev.PotvrdaDirektora = false;
-
             decimal limit = UcitajLimitIzJsona(putanjaDoJson);
+            return ukupniTrosak <= limit;
+        }
 
-            if (zahtev.UkupanProcenjeniTrosak > limit)
-            {
-                zahtev.Status = "Na čekanju";
-            }
-            else
-            {
-                zahtev.Status = "Odobren";
-            }
+        public List<ZahtevZaPutovanje> PreuzmiSveZahteve()
+        {
+            return _zahtevRepo.PreuzmiSve();
+        }
 
-            int sledeciId = _zahtevRepo.PreuzmiSve().Count + 1;
-            zahtev.OznakaZahteva = $"TR-{DateTime.Now.Year}-{sledeciId:D4}";
+        public ZahtevZaPutovanje VratiZahtevPoId(int id)
+        {
+            return _zahtevRepo.VratiPoId(id);
+        }
 
+        public List<Zaposleni> VratiSveZaposlene()
+        {
+            return _zaposleniRepo.PreuzmiSve();
+        }
+
+        public void KreirajNoviZahtev(ZahtevZaPutovanje zahtev)
+        {
             _zahtevRepo.Ubaci(zahtev);
         }
 
-        public void IzmeniZahtev(ZahtevZaPutovanje izmenjenZahtev)
+        public void ObrisiZahtev(int id)
         {
-            var postojeci = _zahtevRepo.VratiPoId(izmenjenZahtev.BrojZahteva);
-            if (postojeci != null)
-            {
-                postojeci.ZaposleniID = izmenjenZahtev.ZaposleniID;
-                postojeci.Destinacija = izmenjenZahtev.Destinacija;
-                postojeci.CiljAgende = izmenjenZahtev.CiljAgende;
-                postojeci.PoslovniRazlog = izmenjenZahtev.PoslovniRazlog;
-                postojeci.UkupanProcenjeniTrosak = izmenjenZahtev.UkupanProcenjeniTrosak;
-                postojeci.UticajNaBudzet = izmenjenZahtev.UticajNaBudzet;
+            _zahtevRepo.Obrisi(id);
+        }
 
-                _zahtevRepo.Izmeni(postojeci);
+        public void OdobriZahtev(int id)
+        {
+            var zahtev = _zahtevRepo.VratiPoId(id);
+            if (zahtev != null)
+            {
+                zahtev.Status = "Odobren";
+                _zahtevRepo.Izmeni(zahtev);
             }
         }
 
-        public bool OdobriZahtev(int id, int? direktorId = null)
+        public void OdbijZahtev(int id)
         {
             var zahtev = _zahtevRepo.VratiPoId(id);
-            if (zahtev == null) return false;
+            if (zahtev != null)
+            {
+                zahtev.Status = "Odbijen";
+                _zahtevRepo.Izmeni(zahtev);
+            }
+        }
+
+        public bool OdobriZahtev(int id, int direktorId)
+        {
+            var zahtev = _zahtevRepo.VratiPoId(id);
+            if (zahtev == null)
+            {
+                return false;
+            }
 
             zahtev.Status = "Odobren";
-            zahtev.PotvrdaDirektora = true;
-            if (direktorId.HasValue)
-            {
-                zahtev.KorisnikDirektorID = direktorId;
-            }
-
             _zahtevRepo.Izmeni(zahtev);
             return true;
         }
 
-        public bool OdbijZahtev(int id, int? direktorId = null, string razlog = null)
+        public bool OdbijZahtev(int id, int direktorId, string obrazlozenje)
         {
             var zahtev = _zahtevRepo.VratiPoId(id);
-            if (zahtev == null) return false;
+            if (zahtev == null)
+            {
+                return false;
+            }
 
             zahtev.Status = "Odbijen";
-            zahtev.PotvrdaDirektora = false;
-            if (direktorId.HasValue)
-            {
-                zahtev.KorisnikDirektorID = direktorId;
-            }
-
             _zahtevRepo.Izmeni(zahtev);
-            return true;
-        }
-
-        public bool ObrisiZahtev(int id)
-        {
-            var zahtev = _zahtevRepo.VratiPoId(id);
-            if (zahtev == null) return false;
-
-            _zahtevRepo.Obrisi(id);
             return true;
         }
     }

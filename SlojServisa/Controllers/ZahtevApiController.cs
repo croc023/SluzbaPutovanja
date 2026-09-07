@@ -1,17 +1,18 @@
-﻿using System;
+﻿using PoslovnaLogika;
+using SistemPutovanja.Repozitorijumi;
+using SlojPodataka.Modeli;
+using SlojPodataka.Repositories;
+using System;
 using System.IO;
 using System.Web.Hosting;
 using System.Web.Http;
-using PoslovnaLogika;
-using SlojPodataka.Repositories;
-using SlojPodataka.Modeli;
 
 namespace SlojServisa.Controllers
 {
     [RoutePrefix("api/zahtevi")]
     public class ZahtevApiController : ApiController
     {
-        private readonly ZahtevZaPutovanjeRepo _zahtevRepo = new ZahtevZaPutovanjeRepo();
+        private readonly ZahtevZaPutovanjeRepozitorijum _zahtevRepo = new ZahtevZaPutovanjeRepozitorijum();
         private readonly ObradaZahteva _obradaZahteva = new ObradaZahteva();
 
         [HttpGet]

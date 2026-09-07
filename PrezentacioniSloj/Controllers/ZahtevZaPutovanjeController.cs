@@ -293,5 +293,10 @@ namespace PrezentacioniSloj.Controllers
 
             return View(model);
         }
+
+        public void ObrisiZahtev(int id)
+        {
+            _obradaZahteva.ObrisiZahtev(id);
+        }
     }
 }

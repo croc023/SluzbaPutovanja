@@ -188,9 +188,9 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Greska.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\ONama.cshtml" />
-    <Content Include="Views\Home\Kontakt.cshtml" />
-    <Content Include="Views\Home\Pocetna.cshtml" />
+    <Content Include="Views\Pocetna\ONama.cshtml" />
+    <Content Include="Views\Pocetna\Kontakt.cshtml" />
+    <Content Include="Views\Pocetna\Pocetna.cshtml" />
     <Content Include="Views\Prijava\Prijava.cshtml" />
     <Content Include="Views\ZahtevZaPutovanje\Indeks.cshtml" />
     <Content Include="Views\ZahtevZaPutovanje\Kreiraj.cshtml" />
@@ -237,9 +237,9 @@
       <Project>{b42c17c0-9871-419f-92cc-22fcf6634323}</Project>
       <Name>PoslovnaLogika</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SluzbaPutovanja\SlojPodataka.csproj">
-      <Project>{61026c7f-ef8e-4d66-be67-d8a2ec0a1119}</Project>
-      <Name>SlojPodataka</Name>
+    <ProjectReference Include="..\SistemPutovanja.Podaci\SistemPutovanja.Podaci.csproj">
+      <Project>{840bd3ae-3d65-473e-b0ab-e2fecc508579}</Project>
+      <Name>SistemPutovanja.Podaci</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

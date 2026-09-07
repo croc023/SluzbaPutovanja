@@ -188,9 +188,9 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\O nama.cshtml" />
-    <Content Include="Views\Home\Kontakt.cshtml" />
-    <Content Include="Views\Home\Pocetna.cshtml" />
+    <Content Include="Views\Pocetna\O nama.cshtml" />
+    <Content Include="Views\Pocetna\Kontakt.cshtml" />
+    <Content Include="Views\Pocetna\Pocetna.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -231,9 +231,9 @@
       <Project>{31c32f11-e1da-4716-b89b-5d0b9b6073a1}</Project>
       <Name>PrezentacioniSloj</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SluzbaPutovanja\SlojPodataka.csproj">
-      <Project>{61026c7f-ef8e-4d66-be67-d8a2ec0a1119}</Project>
-      <Name>SlojPodataka</Name>
+    <ProjectReference Include="..\SistemPutovanja.Podaci\SistemPutovanja.Podaci.csproj">
+      <Project>{840bd3ae-3d65-473e-b0ab-e2fecc508579}</Project>
+      <Name>SistemPutovanja.Podaci</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -64,9 +64,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SluzbaPutovanja\SlojPodataka.csproj">
-      <Project>{61026c7f-ef8e-4d66-be67-d8a2ec0a1119}</Project>
-      <Name>SlojPodataka</Name>
+    <ProjectReference Include="..\SistemPutovanja.Podaci\SistemPutovanja.Podaci.csproj">
+      <Project>{840bd3ae-3d65-473e-b0ab-e2fecc508579}</Project>
+      <Name>SistemPutovanja.Podaci</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
