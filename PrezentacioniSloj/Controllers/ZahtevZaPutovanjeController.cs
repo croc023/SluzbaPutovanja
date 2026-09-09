@@ -125,6 +125,38 @@ namespace PrezentacioniSloj.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult Izmeni(KreiranjeZahtevaViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var zahtev = _obradaZahteva.VratiZahtevPoId(model.BrojZahteva);
+                if (zahtev != null)
+                {
+                    zahtev.ZaposleniID = model.ZaposleniID;
+                    zahtev.Destinacija = model.Destinacija;
+                    zahtev.CiljAgende = model.CiljAgende;
+                    zahtev.PoslovniRazlog = model.PoslovniRazlog;
+                    zahtev.UticajNaBudzet = model.UticajNaBudzet;
+                    zahtev.UkupanProcenjeniTrosak = model.UkupanProcenjeniTrosak;
+
+                    _obradaZahteva.IzmeniZahtev(zahtev);
+                }
+
+                return RedirectToAction("Indeks");
+            }
+
+            model.ZaposleniLista = _obradaZahteva.VratiSveZaposlene().Select(z => new SelectListItem
+            {
+                Value = z.ZaposleniID.ToString(),
+                Text = z.ImePrezime,
+                Selected = z.ZaposleniID == model.ZaposleniID
+            });
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Kreiraj(KreiranjeZahtevaViewModel model)
         {
             bool vecPostoji = _obradaZahteva.PreuzmiSveZahteve().Any(z =>

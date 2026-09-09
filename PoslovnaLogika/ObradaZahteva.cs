@@ -118,5 +118,10 @@ namespace PoslovnaLogika
             _zahtevRepo.Izmeni(zahtev);
             return true;
         }
+
+        public void IzmeniZahtev(ZahtevZaPutovanje zahtev)
+        {
+            _zahtevRepo.Izmeni(zahtev);
+        }
     }
 }
