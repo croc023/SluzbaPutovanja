@@ -7,7 +7,7 @@ namespace PrezentacioniSloj.Controllers
 {
     public class PrijavaController : Controller
     {
-        private readonly KorisnikRepo _korisnikRepo = new KorisnikRepo();
+        private readonly KorisnikRepozitorijum _korisnikRepo = new KorisnikRepozitorijum();
 
         [HttpGet]
         public ActionResult Prijava()
