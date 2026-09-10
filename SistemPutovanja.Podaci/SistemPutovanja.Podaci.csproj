@@ -196,6 +196,7 @@
     <Compile Include="Repozitorijumi\BazniRepozitorijum.cs" />
     <Compile Include="Repozitorijumi\KorisnikRepo.cs" />
     <Compile Include="Repozitorijumi\StavkaPutovanjaRepo.cs" />
+    <Compile Include="Repozitorijumi\ZahtevProcedureRepozitorijum.cs" />
     <Compile Include="Repozitorijumi\ZahtevSqlRepo.cs" />
     <Compile Include="Repozitorijumi\ZahtevZaPutovanjeRepozitorijum.cs" />
     <Compile Include="Repozitorijumi\ZaposleniRepo.cs" />
